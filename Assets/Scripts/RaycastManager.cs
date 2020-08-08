@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class RaycastManager : MonoBehaviour
 {
-    public float Forward, ForwardLeft, ForwardRight, Left, Right;
-    public float Distance;
-    // Start is called before the first frame update
-    void Start()
-    {
-        Distance = 3;
-    }
+    public float Forward;
+    public float ForwardLeft;
+    public float ForwardRight;
+    public float Left;
+    public float Right;
+    
+    public float RaycastDistance = 3;
 
-    // Update is called once per frame
+    [SerializeField] private Transform forwardSensor;
+    [SerializeField] private Transform forwardLeftSensor;
+    [SerializeField] private Transform forwardRightSensor;
+    [SerializeField] private Transform backLeftSensor;
+    [SerializeField] private Transform backRightSensor;
     void Update()
     {
         UpdateDistances();
@@ -20,20 +24,19 @@ public class RaycastManager : MonoBehaviour
 
     private void UpdateDistances() 
     {
-        Forward = GetRaycastDistance(transform.up);
-        ForwardLeft = GetRaycastDistance(Quaternion.Euler(0, 0, 60) * transform.up);
-        ForwardRight = GetRaycastDistance(Quaternion.Euler(0, 0, -60) * transform.up);
-        Right = GetRaycastDistance(Quaternion.Euler(0, 0, 30) * transform.up);
-        Left = GetRaycastDistance(Quaternion.Euler(0, 0, -30) * transform.up);
-        Debug.DrawRay(transform.position+transform.up*0.5f, transform.up, Color.red);
+        Forward = GetRaycastDistance(forwardSensor);
+        ForwardLeft = GetRaycastDistance(forwardLeftSensor);
+        ForwardRight = GetRaycastDistance(forwardRightSensor);
+        Right = GetRaycastDistance(backLeftSensor);
+        Left = GetRaycastDistance(backRightSensor);
     }
 
-    private float GetRaycastDistance(Vector2 direction)
+    private float GetRaycastDistance(Transform sensor)
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position + transform.up*0.5f, direction, Distance);
+        RaycastHit2D hit = Physics2D.Raycast(sensor.position, sensor.up, RaycastDistance);
         if (hit.collider != null)
         {
-            return hit.distance;
+            return RaycastDistance/hit.distance;
         }
 
         return 0;
