@@ -5,10 +5,11 @@ using UnityEngine;
 public class RaycastManager : MonoBehaviour
 {
     public float Forward, ForwardLeft, ForwardRight, Left, Right;
+    public float Distance;
     // Start is called before the first frame update
     void Start()
     {
-        
+        Distance = 3;
     }
 
     // Update is called once per frame
@@ -29,7 +30,7 @@ public class RaycastManager : MonoBehaviour
 
     private float GetRaycastDistance(Vector2 direction)
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position + transform.up*0.5f, direction);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position + transform.up*0.5f, direction, Distance);
         if (hit.collider != null)
         {
             return hit.distance;
